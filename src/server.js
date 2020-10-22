@@ -23,4 +23,4 @@ server
     .post('/save-orphanage', pages.saveOrphanage)
 
 //ligar o servidor
-server.listen(443)
+server.listen(80)

@@ -1,5 +1,27 @@
 // create map
-const map = L.map('mapid').setView([-15.2335318,-59.3327627], 15)
+navigator.geolocation.watchPosition((position) => {
+    localStorage.setItem('latitude', position.coords.latitude);
+    localStorage.setItem('longitude', position.coords.longitude);       
+   }, (err) => {
+      alert("A aplicação Precisa acessar seu geolocalização, por favor permita");
+  });
+
+    latitude = localStorage.getItem('latitude');
+    longitude = localStorage.getItem('longitude');
+
+    fetch(`https://nominatim.openstreetmap.org/reverse?&format=json&lat=${latitude}&lon=${longitude}`).then( async (response)=>{
+        
+        positionUser = await response.json()
+
+    document.getElementById('state').innerHTML = positionUser.address.state
+    document.getElementById('city').innerHTML = positionUser.address.city
+
+
+    }
+    )
+
+
+const map = L.map('mapid').setView([latitude,longitude], 15)
 
 // create and add tileLayer
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -8,6 +30,13 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 })
 .addTo(map)
 
+// const watchID = navigator.geolocation.getCurrentPosition((position) => {
+//     var latitude = position.coords.latitude
+//     var longitude =  position.coords.longitude
+
+//     return [latitude, longitude]
+//   }
+//   );
 
 // create icon
 const icon = L.icon({
